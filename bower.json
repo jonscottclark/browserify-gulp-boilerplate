@@ -1,0 +1,31 @@
+{
+  "name": "gulp-browserify-boilerplate",
+  "version": "0.0.1",
+  "authors": [
+    "Jon Scott Clark <me@jclark.io>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "~3.3.5",
+    "matchMedia": "~0.2.0",
+    "scut": "~1.2.1"
+  },
+  "overrides": {
+    "bootstrap-sass": {
+      "main": [
+        "assets/fonts/*",
+        "assets/stylesheets/**/*"
+      ]
+    },
+    "jquery": {
+      "ignore": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+# Package directories
+node_modules
+
+# Bower
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
+# Built files
+dist
+
+# Local temp stuff
+misc
+
+# Vendor CSS from bower packages gets moved here by Gulp
+src/css/vendor
+
+# Subversion
+.svn
+
+# Logs
+logs
+*.log
+npm-debug.log*
