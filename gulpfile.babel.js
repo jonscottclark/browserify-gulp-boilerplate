@@ -95,7 +95,7 @@ gulp.task('watch', done => {
   // Build and then define watching tasks
   runSequence('build', () => {
     // Compile Sass
-    gulp.watch(src.css, ['sass']);
+    gulp.watch(`${srcDir.css}/**/*.scss`, ['sass']);
 
     // Compress Images
     gulp.watch(src.img, ['images']);
