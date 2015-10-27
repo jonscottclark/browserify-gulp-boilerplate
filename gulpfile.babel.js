@@ -195,8 +195,7 @@ gulp.task('bower-sass', () => {
   // Define where to look for the Sass in each bower package
   var baseDirs = {
     'bootstrap-sass': '/assets/stylesheets',
-    'scut': '/dist',
-    'slick-carousel': '/slick'
+    'scut': '/dist'
   };
 
   // Move the relevant files to our Sass directory
