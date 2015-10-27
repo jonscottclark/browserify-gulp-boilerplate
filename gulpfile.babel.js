@@ -352,15 +352,26 @@ gulp.task('serve', () => {
 
 // Report
 
-gulp.task('report', function() {
-  $.util.log($.util.colors.yellow('⇒ Asset file size report:'));
+gulp.task('report', done => {
+  runSequence(
+    'report:images',
+    'report:css',
+    'report:js',
+    done
+  );
+});
 
-  gulp.src(`${dist.images}/**/*.{gif,png,jpg,webp}`)
+gulp.task('report:images', () => {
+  return gulp.src(`${dist.images}/**/*.{gif,png,jpg,webp}`)
     .pipe($.size({title: '⇒ Images (optimized with imagemin)'}));
+});
 
-  gulp.src(`${dist.css}/**/*.css`)
+gulp.task('report:css', () => {
+  return gulp.src(`${dist.css}/**/*.css`)
     .pipe($.size({ title: '⇒ CSS ' + (argv.deploy ? '(minified)' : '(unminified)'), showFiles: true }))
+});
 
+gulp.task('report:js', () => {
   return gulp.src(`${dist.js}/**/*.js`)
     .pipe($.size({ title: '⇒ JS ' + (argv.deploy ? '(uglified)' : '(debug mode)'), showFiles: true }));
 });
