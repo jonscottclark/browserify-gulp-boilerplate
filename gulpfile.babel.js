@@ -354,7 +354,7 @@ gulp.task('serve', () => {
 // Report
 
 gulp.task('report', function() {
-  $.util.log($.util.colors.yellow('⇒ Asset file size report'));
+  $.util.log($.util.colors.yellow('⇒ Asset file size report:'));
 
   gulp.src(`${dist.images}/**/*.{gif,png,jpg,webp}`)
     .pipe($.size({title: '⇒ Images (optimized with imagemin)'}));
@@ -371,7 +371,9 @@ gulp.task('report', function() {
  */
 
 // Default task
-gulp.task('default', ['watch', 'serve']);
+gulp.task('default', ['watch', 'serve'], () => {
+  $.util.log($.util.colors.yellow('⇒ Watching for changes...'));
+});
 
 // Standalone build task
 gulp.task('build', done => {
