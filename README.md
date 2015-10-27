@@ -4,7 +4,7 @@ The objective of this boilerplate is to provide a quick jumping-off point to sta
 
 ### Bundling
 
-The project uses @zoubin's [`gulp-watchify-factor-bundle`](https://github.com/zoubin/gulp-watchify-factor-bundle)to abstract the process of transforming browserify entries that get split off from the common browserify bundle task by the [`factor-bundle`](https://github.com/substack/factor-bundle) plugin. *(Unfortunately, using `watchify` hasn't worked for me yet using this implementation, so Gulp will rebundle everything using a regular `gulp.watch` task. Sorry.)*
+The project uses @zoubin's [`gulp-watchify-factor-bundle`](https://github.com/zoubin/gulp-watchify-factor-bundle)to abstract the process of transforming browserify entries that get split off from the common browserify bundle task by the [`factor-bundle`](https://github.com/substack/factor-bundle) plugin. *(Unfortunately, using `watchify` hasn't worked for me yet using this implementation, so Gulp will rebundle everything using a regular `gulp.watch` task.)*
 
 `factor-bundle` checks all entries defined in the browserify config and bundles any modules that are shared between these entries into a `common.js` file.
 
@@ -12,37 +12,28 @@ The project uses @zoubin's [`gulp-watchify-factor-bundle`](https://github.com/zo
 
 The boilerplate assumes you'll be developing UI components and templates to display them (in isolation, and alongside other components to form mockups of complete pages.
 
-In your HTML, include `common.js`, then include a main `app.js` file which will check for the presence of these components on the page and asynchronously load their associated functionality with the `scriptjs` module (it's nicer than jQuery's `$.getScript`).
+In your HTML, include `common.js`, then include a main `app.js` file which will check for the presence of these components on the page and asynchronously load their associated functionality with the `scriptjs` module (it's handles dependencies better than jQuery's `$.getScript`).
 
-*(Another approach to the currently-implemented pattern is to use [`partition-bundle`](https://github.com/arian/partition-bundle), which is similar to `factor-bundle`, but it differs because it can dynamically include external scripts using `require()` and a chosen module name determined at build-time. The components could be written as CommonJS modules instead of being exposed globally after being loaded. Unfortunately, the documentation is sparse and I decided against using `partition-bundle` for the time being. Sorry I polluted the global scope.)*
+*(Another approach to the currently-implemented pattern is to use [`partition-bundle`](https://github.com/arian/partition-bundle), which is similar to `factor-bundle`, but it differs because it can dynamically include external scripts using `require()` and a defined module name determined at build-time. The components could be written as CommonJS modules instead of being exposed globally after being loaded. Unfortunately, the documentation is sparse and I decided against using `partition-bundle` for the time being. Sorry I've polluted the global scope.)*
 
 ### CSS
 
-The recommended naming convention for components, utilities, JS identifiers, and state is borrowed from [@necolas](https://github.com/necolas), and is an extension of BEM syntax:
+The recommended naming convention for components, utilities, and state is borrowed from [@necolas](https://github.com/necolas), and is an extension of BEM syntax:
 
 ```css
-/* Utility */
-.u-utilityName {}
-
-/* Component */
-.ComponentName {}
-
-/* Component modifier */
-.ComponentName--modifierName {}
-
-/* Component descendant */
-.ComponentName-descendant {}
-
-/* Component descendant modifier */
-.ComponentName-descendant--modifierName {}
-
-/* Component state (scoped to component) */
-.ComponentName.is-stateOfComponent {}
+.u-utilityName
+.ComponentName
+.ComponentName--modifierName
+.ComponentName-descendant
+.ComponentName-descendant--modifierName
+.ComponentName.is-stateOfComponent
 ```
 
 Generally, the thoughts summed up in [this wonderful article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/) should guide your CSS authoring.
 
 [PostCSS](https://github.com/postcss/postcss) is used for [autoprefixer](https://github.com/postcss/autoprefixer) and for post-compile optimizations using [cssnano](https://github.com/ben-eb/cssnano). You can add other processors as needed, like a BEM linter or statistics provider.
+
+[Scut](https://github.com/davidtheclark/scut) (**S**ass-**C**SS **Ut**itilies) is included, which eases CSS development by providing a solid collection of mixins to take care of common CSS patterns. Scut can be easily removed by uninstalling the Bower package (but I've found it to be invaluable).
 
 ### Jade
 
