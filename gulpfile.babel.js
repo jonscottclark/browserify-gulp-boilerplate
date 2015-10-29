@@ -207,9 +207,9 @@ gulp.task('bower-sass', () => {
       var base = rel.replace(path.join(pkg, baseDirs[pkg], '/'), '').replace(path.basename(file.path), '');
       var dest = path.join(srcDir.css, 'vendor', pkg, base);
 
-      gulp.src(file.path)
-        .pipe(gulp.dest(dest));
-      cb();
+      var ws = fs.createWriteStream(path.join(dest, path.basename(file.path)));
+      ws.on('close', cb);
+      file.pipe(ws);
     }));
 });
 
