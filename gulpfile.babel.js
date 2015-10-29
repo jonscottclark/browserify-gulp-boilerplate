@@ -122,7 +122,7 @@ gulp.task('clean', del.bind(
 
 // Generate custom modernizr build
 gulp.task('modernizr', () => {
-  gulp.src(src.js)
+  return gulp.src(src.js)
     .pipe($.modernizr('modernizr.js', {
       tests: [
         'mediaqueries'
@@ -199,7 +199,7 @@ gulp.task('bower-sass', () => {
   };
 
   // Move the relevant files to our Sass directory
-  gulp.src(bower)
+  return gulp.src(bower)
     .pipe(filters.sass)
     .pipe(map((file, cb) => {
       var rel = file.path.replace(path.join(__dirname, bowerrc.directory), '');
