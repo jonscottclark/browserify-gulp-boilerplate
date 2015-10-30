@@ -271,8 +271,9 @@ gulp.task('sass', () => {
 
   return gulp.src(src.css)
     .pipe($.sass({
+      imagePath: dist.img,
       includePaths: [srcDir.css],
-      imagePath: dist.img
+      precision: 8
     }))
     .pipe($.postcss(processors))
     .pipe(gulp.dest(dist.css))
