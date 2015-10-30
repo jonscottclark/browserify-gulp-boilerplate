@@ -29,6 +29,7 @@ var through      = require('through2');
 
 // Browserify
 var browserify   = require('browserify');
+var babelify     = require('babelify');
 
 // PostCSS plugins
 var autoprefixer = require('autoprefixer');
@@ -154,6 +155,8 @@ gulp.task('browserify', done => {
     entries,
     debug: (!argv.deploy)
   });
+
+  b.transform(babelify);
 
   var bundle = $.watchifyFactorBundle(b,
     { entries, outputs, common },
