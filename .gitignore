@@ -19,6 +19,9 @@ src/css/vendor
 # Subversion
 .svn
 
+# Sublime Text files
+*.sublime-*
+
 # Logs
 logs
 *.log
