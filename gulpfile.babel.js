@@ -156,7 +156,9 @@ gulp.task('browserify', done => {
     debug: (!argv.deploy)
   });
 
-  b.transform(babelify);
+  b.transform(babelify, {
+    presets: ['es2015']
+  });
 
   var bundle = $.watchifyFactorBundle(b,
     { entries, outputs, common },
