@@ -10,7 +10,7 @@ fastclick(document.body);
 
 // https://github.com/paulirish/matchMedia.js/
 if (!Modernizr.mq('only all')) {
-  $script(basePath + 'matchMedia.js');
+  $script(basePath + 'vendor/matchMedia.js');
 }
 
 // Namespace for our components

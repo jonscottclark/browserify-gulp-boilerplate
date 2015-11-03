@@ -227,7 +227,7 @@ gulp.task('bower-js', () => {
   return gulp.src(bower)
     .pipe(filters.js)
     .pipe($.uglify())
-    .pipe(gulp.dest(dist.js));
+    .pipe(gulp.dest(`${dist.js}/vendor`));
 });
 
 gulp.task('bower-css', () => {
