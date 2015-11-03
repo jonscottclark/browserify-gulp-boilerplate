@@ -2,11 +2,28 @@
  * Variables
  */
 
-$line-height: 1.5em;
 
-// Colors
-$almost-white: rgb(245,245,245);
 
 // Overrides
 
   // Bootstrap
+
+  $grid-columns: 12;
+  $grid-gutter-width: 16px;
+  $gutter: $grid-gutter-width;
+
+  $screen-xs-min: 480px;
+  $screen-sm-min: 768px;
+  $screen-md-min: 992px;
+  $screen-lg-min: 1200px;
+
+
+
+// Colors
+$almost-white: rgb(245,245,245);
+
+// Typography
+$font-stack: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$line-height: 1.2em;
+$rem: 16px;
+$scut-rem-base: 16;

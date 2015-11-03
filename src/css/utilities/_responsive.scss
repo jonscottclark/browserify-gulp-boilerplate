@@ -2,14 +2,19 @@
  * General utility
  */
 
-@mixin img-responsive($display: block) {
-  display: $display;
-  max-width: 100%; // Part 1: Set a maximum relative to the parent
-  height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+@mixin show-bp($bp, $display: block) {
+  display: none;
+  @media #{$bp} {
+    display: $display;
+  }
 }
-img.responsive {
-  @include img-responsive;
+@mixin hide-bp($bp) {
+  @media #{$bp} {
+    display: none;
+  }
 }
+
+
 
 /*
  * Media queries functions and variables adapted from ZURB Foundation
@@ -32,12 +37,14 @@ img.responsive {
   @return nth($range, 2);
 }
 
+
+
 // Breakpoints and variables
 
-$mq-xsmall: 480px;
-$mq-small: 640px;
-$mq-medium: 768px;
-$mq-large: 960px;
+$mq-xsmall: $screen-xs-min;
+$mq-small: $screen-sm-min;
+$mq-medium: $screen-md-min;
+$mq-large: $screen-lg-min;
 
 $xsmall-range: (($mq-xsmall), ($mq-small - 1));
 $small-range: (($mq-small), ($mq-medium - 1));
@@ -57,21 +64,6 @@ $medium-only: "#{$screen} and (min-width:#{lower-bound($medium-range)}) and (max
 $large-up: "#{$screen} and (min-width:#{lower-bound($large-range)})";
 $large-only: "#{$screen} and (min-width:#{lower-bound($large-range)}) and (max-width:#{upper-bound($large-range)})";
 
-/*
- * Responsive utility mixins
- */
-
-@mixin show-bp($bp, $display: block) {
-  display: none;
-  @media #{$bp} {
-    display: $display;
-  }
-}
-@mixin hide-bp($bp) {
-  @media #{$bp} {
-    display: none;
-  }
-}
 
 /*
  * High-DPI
