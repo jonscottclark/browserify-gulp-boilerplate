@@ -2,7 +2,7 @@
  * Project-specific Variables
  */
 
-@import "variables";
+@import "utilities/variables";
 
 /*
  * Vendor styles
@@ -26,6 +26,7 @@
   @import "vendor/bootstrap-sass/bootstrap/forms";
 
   // Components
+  @import "vendor/bootstrap-sass/bootstrap/buttons";
   @import "vendor/bootstrap-sass/bootstrap/button-groups";
   @import "vendor/bootstrap-sass/bootstrap/input-groups";
 
@@ -39,17 +40,24 @@
  * Utilities/Mixins
  */
 
-@import "responsive";
-@import "mixins";
+
+@import "utilities/mixins";
+@import "utilities/responsive";
+
+/*
+ * Base styles
+ */
+
+@import "base/reset";
 
 /*
  * Partials
  */
 
-@import "partials";
+@import "utilities/partials";
 
 /*
  * Components
  */
 
-@import "components";
+@import "utilities/components";

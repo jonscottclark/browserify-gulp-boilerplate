@@ -249,10 +249,10 @@ gulp.task('bower-fonts', () => {
 gulp.task('sass', () => {
   // Auto-generate @import statements for components and partials
   ['components', 'partials'].forEach(type => {
-    var target = `${srcDir.css}/_${type}.scss`;
+    var target = `${srcDir.css}/utilities/_${type}.scss`;
     fs.writeFileSync(target, '');
     readdir(`${srcDir.css}/${type}`).forEach(file => {
-      fs.appendFileSync(target, `@import '${type}/${file.replace('.scss','')}';\n`);
+      fs.appendFileSync(target, `@import '../${type}/${file.replace('.scss','')}';\n`);
     });
   });
 
