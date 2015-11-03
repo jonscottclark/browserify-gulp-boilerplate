@@ -210,9 +210,13 @@ gulp.task('bower-sass', () => {
       var rel = file.path.replace(path.join(__dirname, bowerrc.directory), '');
       var pkg = rel.split(path.sep)[1];
       var base = rel.replace(path.join(pkg, baseDirs[pkg], '/'), '').replace(path.basename(file.path), '');
-      var dest = path.join(srcDir.css, 'vendor', pkg, base);
+      var dest = path.join(__dirname, srcDir.css, 'vendor', pkg, base);
+      var target = path.join(dest, path.basename(file.path));
 
-      var ws = fs.createWriteStream(path.join(dest, path.basename(file.path)));
+      mkdirp(dest);
+      fs.writeFileSync(target, '');
+
+      var ws = fs.createWriteStream(target);
       ws.on('close', cb);
       file.pipe(ws);
     }));
