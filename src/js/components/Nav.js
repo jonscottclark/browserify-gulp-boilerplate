@@ -1,8 +1,8 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-window.component.Nav = (function(){
+window.component.Nav = (() => {
   return {
-    init: function(){
+    init: () => {
       console.log('Nav component loaded!');
     }
   };

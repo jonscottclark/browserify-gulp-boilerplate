@@ -1,9 +1,9 @@
-var $         = require('jquery');
-var fastclick = require('fastclick');
-var $script   = require('scriptjs');
+import $         from 'jquery';
+import fastclick from 'fastclick';
+import $script   from 'scriptjs';
 
 // Config
-var basePath = '/js/';
+const basePath = '../js/';
 
 // https://www.npmjs.com/package/fastclick
 fastclick(document.body);
@@ -16,26 +16,26 @@ if (!Modernizr.mq('only all')) {
 // Namespace for our components
 window.component = {};
 
-$(function() {
+$(() => {
 
   // Load component scripts
-  var components = {
+  let components = {
     'Nav': [],
     'Hero': []
   };
 
-  $.each(components, function(comp, dep) {
-    if ($('.'+comp).length) {
-      var deps = [basePath + 'components/'+comp+'.js'];
+  $.each(components, (comp, dep) => {
+    if ($('.' + comp).length) {
+      let deps = [basePath + 'components/' + comp + '.js'];
 
       if (dep.length) {
-        $.each(dep, function() {
+        $.each(dep, () => {
           deps.push(basePath + dep);
         });
       }
       $script(deps, comp);
 
-      $script.ready(comp, function() {
+      $script.ready(comp, () => {
         component[comp].init();
       });
     }
