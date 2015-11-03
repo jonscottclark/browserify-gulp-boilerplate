@@ -14,8 +14,8 @@ img.responsive {
 /*
  * Media queries functions and variables adapted from ZURB Foundation
  *
- *   (These variables should match Bootstrap 3 breakpoints, if you want to use
- *   Bootstrap's grid mixins (make-sm-column($columns, $gutter), etc.)
+ *   (These variables should match Bootstrap 3 breakpoints if you want to use
+ *   Bootstrap's grid mixins (make-sm-column, etc.); xxsmall and xlarge added)
  */
 
 @function lower-bound($range){
@@ -35,9 +35,9 @@ img.responsive {
 // Breakpoints and variables
 
 $mq-xsmall: 480px;
-$mq-small: 768px;
-$mq-medium: 992px;
-$mq-large: 1200px;
+$mq-small: 640px;
+$mq-medium: 768px;
+$mq-large: 960px;
 
 $xsmall-range: (($mq-xsmall), ($mq-small - 1));
 $small-range: (($mq-small), ($mq-medium - 1));
@@ -55,6 +55,7 @@ $small-only: "#{$screen} and (min-width:#{lower-bound($small-range)}) and (max-w
 $medium-up: "#{$screen} and (min-width:#{lower-bound($medium-range)})";
 $medium-only: "#{$screen} and (min-width:#{lower-bound($medium-range)}) and (max-width:#{upper-bound($medium-range)})";
 $large-up: "#{$screen} and (min-width:#{lower-bound($large-range)})";
+$large-only: "#{$screen} and (min-width:#{lower-bound($large-range)}) and (max-width:#{upper-bound($large-range)})";
 
 /*
  * Responsive utility mixins

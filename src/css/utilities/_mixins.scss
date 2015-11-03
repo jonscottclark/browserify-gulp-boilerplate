@@ -1,0 +1,53 @@
+/// Event wrapper
+/// @author Harry Roberts
+/// @param $self [false] - Whether or not to include current selector
+/// @link https://twitter.com/csswizardry/status/478938530342006784 Original tweet from Harry Roberts
+@mixin on-event($self: false) {
+  @if $self {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  } @else {
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  }
+}
+
+
+/// Set a max width and center, starting at a set breakpoint and up, match max-width to each larger breakpoint
+/// @author Jon Clark
+/// @param $bp [$xsmall-up] - The media query at which containment begins
+/// @param $strict [false] - If true, containment will not bubble up to larger breakpoints
+@mixin contained($bp: $xsmall-up, $strict: false) {
+  @include scut-margin(n auto);
+
+  @if $bp == $xsmall-up {
+    @media #{$xsmall-up} {
+      max-width: $mq-xsmall - $gutter*2;
+    }
+  }
+
+  @if ($bp == $xsmall-up and not $strict) or $bp == $small-up {
+    @media #{$small-up} {
+      max-width: $mq-small - $gutter*2;
+    }
+  }
+
+  @if ($bp == $xsmall-up and not $strict) or ($bp == $small-up and not $strict) or $bp == $medium-up {
+    @media #{$medium-up} {
+      max-width: $mq-medium - $gutter*2;
+    }
+  }
+
+  @if ($bp == $xsmall-up and not $strict) or ($bp == $small-up and not $strict) or ($bp == $medium-up and not $strict) or $bp == $large-up {
+    @media #{$large-up} {
+      max-width: $mq-large - $gutter*2;
+    }
+  }
+}
