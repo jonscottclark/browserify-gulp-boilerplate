@@ -3,14 +3,14 @@ import fastclick from 'fastclick';
 import $script   from 'scriptjs';
 
 // Config
-const basePath = '../js/';
+const basePath = '../js';
 
 // https://www.npmjs.com/package/fastclick
 fastclick(document.body);
 
 // https://github.com/paulirish/matchMedia.js/
 if (!Modernizr.mq('only all')) {
-  $script(basePath + 'vendor/matchMedia.js');
+  $script(basePath + '/vendor/matchMedia.js');
 }
 
 // Namespace for our components
@@ -26,7 +26,7 @@ $(() => {
 
   $.each(components, (comp, dep) => {
     if ($('.' + comp).length) {
-      let deps = [basePath + 'components/' + comp + '.js'];
+      let deps = [basePath + '/components/' + comp + '.js'];
 
       if (dep.length) {
         $.each(dep, () => {
