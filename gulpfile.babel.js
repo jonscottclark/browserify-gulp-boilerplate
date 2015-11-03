@@ -106,7 +106,7 @@ gulp.task('watch', done => {
 
     // Compile Jade templates
     gulp.watch(src.components, ['components']);
-    gulp.watch(src.html, ['html']);
+    gulp.watch(src.html.concat([`${srcDir.html}/{layouts,mixins}/**/*.jade`]), ['html']);
 
     done();
   });
