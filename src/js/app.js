@@ -16,13 +16,28 @@ if (!Modernizr.mq('only all')) {
 // Namespace for our components
 window.component = {};
 
-// App logic
 $(function() {
-  if ($('.Nav').length) {
-    $script([basePath + 'components/Nav.js'], 'Nav');
 
-    $script.ready('Nav', function() {
-      component.Nav.init();
-    });
-  }
+  // Load component scripts
+  var components = {
+    'Nav': [],
+    'Hero': []
+  };
+
+  $.each(components, function(comp, dep) {
+    if ($('.'+comp).length) {
+      var deps = [basePath + 'components/'+comp+'.js'];
+
+      if (dep.length) {
+        $.each(dep, function() {
+          deps.push(basePath + dep);
+        });
+      }
+      $script(deps, comp);
+
+      $script.ready(comp, function() {
+        component[comp].init();
+      });
+    }
+  });
 });
