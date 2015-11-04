@@ -29,10 +29,11 @@ $(() => {
       let deps = [basePath + '/components/' + comp + '.js'];
 
       if (dep.length) {
-        $.each(dep, () => {
-          deps.push(basePath + dep);
+        $.each(dep, (i, d) => {
+          deps.push(basePath + d);
         });
       }
+
       $script(deps, comp);
 
       $script.ready(comp, () => {
