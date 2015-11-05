@@ -292,8 +292,7 @@ gulp.task('sass', () => {
 // Images
 gulp.task('images', () => {
   return gulp.src(src.img)
-    .pipe($.changed(dist.img))
-    .pipe($.imagemin({ progressive: true }))
+    .pipe($.if(argv.deploy, $.imagemin({ progressive: true })))
     .pipe(gulp.dest(dist.img))
     .pipe($.connect.reload());
 });
