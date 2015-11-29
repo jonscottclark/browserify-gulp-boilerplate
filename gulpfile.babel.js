@@ -81,8 +81,9 @@ const filters = {
   'svg': $.filter('**/*.svg', {'restore': true})
 };
 
+// Add any files here to exclude from filters
 const ignore = {
-  'img': $.filter(['*', '!slick.svg'])
+  // eg. 'img': $.filter(['*', '!customfont.svg'])
 };
 
 const plumberOpts = {
@@ -260,7 +261,8 @@ gulp.task('bower-css', () => {
 gulp.task('bower-images', () => {
   return gulp.src(bower)
     .pipe(filters.img)
-    .pipe(ignore.img)
+    // Ignore specific files
+    // .pipe(ignore.img)
     .pipe(gulp.dest(dist.img));
 });
 
