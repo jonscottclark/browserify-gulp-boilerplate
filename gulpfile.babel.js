@@ -1,39 +1,36 @@
-var gulp = require('gulp');
+let gulp = require('gulp');
 
 /*
  * Required modules
  */
 
 // Build utilities
-var $            = require('gulp-load-plugins')();
-var bowerFiles   = require('main-bower-files');
+let $            = require('gulp-load-plugins')();
+let bowerFiles   = require('main-bower-files');
 
 // Utility packages
-var path         = require('path');
-var fs           = require('fs');
-var del          = require('del');
-var rfile        = require('rfile');
-var readdir      = require('fs-readdir-recursive');
-var mkdirp       = require('mkdirp');
-var argv         = require('minimist')(process.argv.slice(2));
-var runSequence  = require('run-sequence');
-var uniq         = require('uniq');
-var glob         = require('glob');
+let path         = require('path');
+let fs           = require('fs');
+let del          = require('del');
+let rfile        = require('rfile');
+let readdir      = require('fs-readdir-recursive');
+let mkdirp       = require('mkdirp');
+let argv         = require('minimist')(process.argv.slice(2));
+let runSequence  = require('run-sequence');
+let uniq         = require('uniq');
+let glob         = require('glob');
 
-// Stream/buffer utilities
-var map          = require('map-stream');
-var source       = require('vinyl-source-stream');
-var buffer       = require('vinyl-buffer');
-var transform    = require('vinyl-transform');
-var through      = require('through2');
+// Pipeline utilities
+let map          = require('map-stream');
+let buffer       = require('vinyl-buffer');
 
 // Browserify
-var browserify   = require('browserify');
-var babelify     = require('babelify');
+let browserify   = require('browserify');
+let babelify     = require('babelify');
 
 // PostCSS plugins
-var autoprefixer = require('autoprefixer');
-var cssnano      = require('cssnano');
+let autoprefixer = require('autoprefixer');
+let cssnano      = require('cssnano');
 
 
 /*
@@ -43,51 +40,72 @@ var cssnano      = require('cssnano');
 const bowerrc = JSON.parse(rfile('./.bowerrc'));
 
 const srcDir = {
-  js: './src/js',
-  css: './src/css',
-  img: './src/images',
-  html: './src/html'
+  'js': './src/js',
+  'css': './src/css',
+  'img': './src/images',
+  'html': './src/html'
 };
 
 const dist = {
-  js: './dist/js',
-  css: './dist/css',
-  img: './dist/images',
-  html: './dist',
-  fonts: './dist/fonts'
+  'js': './dist/js',
+  'css': './dist/css',
+  'img': './dist/images',
+  'html': './dist',
+  'fonts': './dist/fonts'
 };
 
 const src = {
-  js: `${srcDir.js}/**/*.js`,
-  css: `${srcDir.css}/*.scss`,
-  img: `${srcDir.img}/**/*.{gif,png,jpg,webp}`,
-  html: [
+  'js': `${srcDir.js}/**/*.js`,
+  'css': `${srcDir.css}/*.scss`,
+  'img': `${srcDir.img}/**/*.{gif,png,jpg,webp,svg}`,
+  'html': [
     `${srcDir.html}/**/*.jade`,
-    `!${srcDir.html}/{components,layouts,mixins}/**/*.jade`,
-    `!${srcDir.html}/_mixins.jade`
+    `!${srcDir.html}/{components,layouts}/**/*.jade`,
+    `!${srcDir.html}/utilities/**/*.jade`
   ],
-  components: `${srcDir.html}/components/**/*.jade`
+  'components': `${srcDir.html}/components/**/*.jade`
 };
 
 const bower = bowerFiles({
-  paths: {
-    bowerDirectory: bowerrc.directory
+  'paths': {
+    'bowerDirectory': bowerrc.directory
   }
 });
 
 const filters = {
-  js: $.filter('**/*.js'),
-  sass: $.filter('**/*.scss'),
-  css: $.filter('**/*.css'),
-  img: $.filter('**/*.{gif,png,jpg,webp}'),
-  fonts: $.filter('**/*.{eot,woff,woff2,ttf,svg}')
+  'js': $.filter('**/*.js'),
+  'sass': $.filter('**/*.scss'),
+  'css': $.filter('**/*.css'),
+  'img': $.filter('**/*.{gif,png,jpg,webp,svg}'),
+  'fonts': $.filter('**/*.{eot,woff,woff2,ttf,svg}'),
+  'svg': $.filter('**/*.svg', {'restore': true})
+};
+
+const ignore = {
+  'img': $.filter(['*', '!slick.svg'])
+};
+
+const plumberOpts = {
+  'errorHandler': function(err) {
+    let msg = err.messageFormatted.split('\n');
+    $.util.log($.util.colors.red(msg.shift()));
+    msg.splice(0, 2).forEach(m => {
+      $.util.log($.util.colors.yellow(m));
+    });
+    msg.forEach(m => {
+      if (m.length) {
+        $.util.log($.util.colors.blue(m));
+      }
+    });
+    this.emit('end');
+  }
 };
 
 /*
- * Watch (Needs to be defined first, the watch variable is used in other tasks)
+ * Watch (Needs to be defined first, the watch letiable is used in other tasks)
  */
 
-var watch = false;
+let watch = false;
 
 gulp.task('watch', done => {
   // Tell other tasks we're watching (most importantly, browserify)
@@ -105,8 +123,7 @@ gulp.task('watch', done => {
     gulp.watch(src.js, ['browserify']);
 
     // Compile Jade templates
-    gulp.watch(src.components, ['components']);
-    gulp.watch(src.html.concat([`${srcDir.html}/{layouts,mixins}/**/*.jade`]), ['html']);
+    gulp.watch([src.html, src.components, `${srcDir.html}/{layouts}/**/*.jade`], ['html']);
 
     done();
   });
@@ -118,14 +135,14 @@ gulp.task('watch', done => {
 
 // Clean dist/ directory
 gulp.task('clean', del.bind(
-  null, ['dist/*'], {dot: true}
+  null, ['dist/*'], {'dot': true}
 ));
 
 // Generate custom modernizr build
 gulp.task('modernizr', () => {
-  return gulp.src(src.js)
+  gulp.src(src.js)
     .pipe($.modernizr('modernizr.js', {
-      tests: [
+      'tests': [
         'mediaqueries'
       ]
     }))
@@ -136,33 +153,36 @@ gulp.task('modernizr', () => {
 // Browserify
 gulp.task('browserify', done => {
   // Define the filename for the shared code
-  var common = 'common.js';
+  let common = 'common.js';
 
   // Tell Browserify which bundles to create (hint: app.js and components/*.js)
-  var srcJS = readdir(srcDir.js);
-  var entries = srcJS.map(file => `${srcDir.js}/${file}`);
+  let srcJS = readdir(srcDir.js, file => {
+    return !file.match('vendor');
+  });
+
+  let entries = srcJS.map(file => `${srcDir.js}/${file}`);
 
   // Define where each file should go (same order as `entries`)
-  var outputs = srcJS;
+  let outputs = srcJS;
 
   // Create any directories (outside of the scope of `factor-bundle`)
-  uniq(entries.map(file => path.dirname(file).replace('src','dist'))).forEach(dir => {
+  uniq(entries.map(file => path.dirname(file).replace('src', 'dist'))).forEach(dir => {
     mkdirp(dir);
   });
 
   // Set browserify options
-  var b = browserify({
+  let b = browserify({
     entries,
-    debug: (!argv.deploy)
+    'debug': !argv.deploy
   });
 
   b.transform(babelify, {
-    presets: ['es2015']
+    'presets': ['es2015']
   });
 
-  var bundle = $.watchifyFactorBundle(b,
+  let bundle = $.watchifyFactorBundle(b,
     { entries, outputs, common },
-    function (bundleStream) {
+    function(bundleStream) {
       return bundleStream
         .pipe(buffer())
         .pipe($.if(argv.deploy, $.uglify()))
@@ -175,8 +195,8 @@ gulp.task('browserify', done => {
 
   // Finish task when all files have bundled.
   srcJS.push(common);
-  var checkBundles = setInterval(() => {
-    if (glob.sync(`${dist.js}/{${srcJS.join(',')}}`).length == srcJS.length) {
+  let checkBundles = setInterval(() => {
+    if (glob.sync(`${dist.js}/{${srcJS.join(',')}}`).length === srcJS.length) {
       done();
       clearInterval(checkBundles);
     }
@@ -198,7 +218,7 @@ gulp.task('bower-sass', () => {
   // Vendor Sass
 
   // Define where to look for the Sass in each bower package
-  var baseDirs = {
+  let baseDirs = {
     'bootstrap-sass': '/assets/stylesheets',
     'scut': '/dist'
   };
@@ -207,16 +227,16 @@ gulp.task('bower-sass', () => {
   return gulp.src(bower)
     .pipe(filters.sass)
     .pipe(map((file, cb) => {
-      var rel = file.path.replace(path.join(__dirname, bowerrc.directory), '');
-      var pkg = rel.split(path.sep)[1];
-      var base = rel.replace(path.join(pkg, baseDirs[pkg], '/'), '').replace(path.basename(file.path), '');
-      var dest = path.join(__dirname, srcDir.css, 'vendor', pkg, base);
-      var target = path.join(dest, path.basename(file.path));
+      let rel = file.path.replace(path.join(__dirname, bowerrc.directory), '');
+      let pkg = rel.split(path.sep)[1];
 
-      mkdirp(dest);
-      fs.writeFileSync(target, '');
+      let vendor = path.join(srcDir.css, 'vendor', pkg);
+      mkdirp(vendor);
 
-      var ws = fs.createWriteStream(target);
+      let base = rel.replace(path.join(pkg, baseDirs[pkg], '/'), '').replace(path.basename(file.path), '');
+      let dest = path.join(vendor, base);
+
+      let ws = fs.createWriteStream(path.join(dest, path.basename(file.path)));
       ws.on('close', cb);
       file.pipe(ws);
     }));
@@ -240,6 +260,7 @@ gulp.task('bower-css', () => {
 gulp.task('bower-images', () => {
   return gulp.src(bower)
     .pipe(filters.img)
+    .pipe(ignore.img)
     .pipe(gulp.dest(dist.img));
 });
 
@@ -253,23 +274,23 @@ gulp.task('bower-fonts', () => {
 gulp.task('sass', () => {
   // Auto-generate @import statements for components and partials
   ['components', 'partials'].forEach(type => {
-    var target = `${srcDir.css}/utilities/_${type}.scss`;
+    let target = `${srcDir.css}/utilities/_${type}.scss`;
     fs.writeFileSync(target, '');
     readdir(`${srcDir.css}/${type}`).forEach(file => {
-      fs.appendFileSync(target, `@import '../${type}/${file.replace('.scss','')}';\n`);
+      fs.appendFileSync(target, `@import '../${type}/${file.replace('.scss', '')}';\n`);
     });
   });
 
   // Set up PostCSS plugins
-  var browsers = [
+  let browsers = [
     'last 1 version',
     '> 1%',
     'ie >= 9',
     'not ie <= 8'
   ];
-  var processors = [
+  let processors = [
     autoprefixer({
-      browsers: browsers
+      'browsers': browsers
     })
   ];
 
@@ -279,10 +300,11 @@ gulp.task('sass', () => {
   }
 
   return gulp.src(src.css)
+    .pipe($.plumber(plumberOpts))
     .pipe($.sass({
-      imagePath: dist.img,
-      includePaths: [srcDir.css],
-      precision: 8
+      'includePaths': [srcDir.css],
+      'imagePath': dist.img,
+      'precision': 8
     }))
     .pipe($.postcss(processors))
     .pipe(gulp.dest(dist.css))
@@ -292,70 +314,40 @@ gulp.task('sass', () => {
 // Images
 gulp.task('images', () => {
   return gulp.src(src.img)
-    .pipe($.if(argv.deploy, $.imagemin({ progressive: true })))
+    .pipe($.if(argv.deploy, $.imagemin({ 'progressive': true })))
+    .pipe(filters.svg)
+    .pipe($.if(argv.deploy, $.svg2png()))
+    .pipe(filters.svg.restore)
     .pipe(gulp.dest(dist.img))
     .pipe($.connect.reload());
 });
 
 // HTML
-gulp.task('mixins', (cb) => {
-  // Create list of mixins to include in main templates
-  var target = `${srcDir.html}/_mixins.jade`;
+gulp.task('components', (cb) => {
+  // Create list of component mixins to include in main templates
+  let target = `${srcDir.html}/utilities/components.jade`;
   fs.writeFileSync(target, '');
-  readdir(`${srcDir.html}/mixins`).forEach(v => {
-    fs.appendFileSync(target, `include mixins/${v.replace('.jade','')}\n`);
+  readdir(`${srcDir.html}/components`).forEach(v => {
+    fs.appendFileSync(target, `include ../components/${v.replace('.jade', '')}\n`);
   });
   cb();
 });
 
-gulp.task('html', ['mixins'], () => {
-  // Process everything but components, ensure mixins are built out first
+gulp.task('html', ['components'], () => {
   return gulp.src(src.html)
-    .pipe($.jade({ pretty: true }))
+    .pipe($.jade({ 'pretty': true }))
     .pipe(gulp.dest(dist.html))
-    .pipe($.connect.reload());
-});
-
-gulp.task('components', ['html'], () => {
-  // Now operate on the components we excluded using `filters.pages`
-  // See https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/using-buffers.md
-  var prepComponents = function(prependText) {
-
-    // Create a stream through which each file will pass
-    var stream = through.obj(function(file, enc, cb) {
-
-      // Add 1 level of indentation for all content to be added under "block content"
-      var modifiedContent = file.contents.toString('utf8').split('\n').map(line => {
-        return '    ' + line;
-      }).join('\n');
-
-      // Prepend text to top of each file
-      var prependBuffer = new Buffer(prependText);
-      file.contents = Buffer.concat([prependBuffer, new Buffer(modifiedContent)]);
-
-      // Make sure the file goes through the next gulp plugin
-      this.push(file);
-      cb();
-    });
-
-    return stream;
-  }
-
-  return gulp.src(src.components)
-    .pipe(prepComponents('extend ../layouts/default\n\nblock content\n'))
-    .pipe($.jade({ pretty: true }))
-    .pipe(gulp.dest(`${dist.html}/components`))
     .pipe($.connect.reload());
 });
 
 // Server
 gulp.task('serve', () => {
-  var port = 9001;
+  let port = 9001;
 
   $.connect.server({
-    root: 'dist',
-    port: port,
-    livereload: true
+    'root': 'dist',
+    'port': port,
+    'livereload': true
   });
 });
 
@@ -372,17 +364,17 @@ gulp.task('report', done => {
 
 gulp.task('report:images', () => {
   return gulp.src(`${dist.images}/**/*.{gif,png,jpg,webp}`)
-    .pipe($.size({title: '⇒ Images (optimized with imagemin)'}));
+    .pipe($.size({'title': '⇒ Images (optimized with imagemin)'}));
 });
 
 gulp.task('report:css', () => {
   return gulp.src(`${dist.css}/**/*.css`)
-    .pipe($.size({ title: '⇒ CSS ' + (argv.deploy ? '(minified)' : '(unminified)'), showFiles: true }))
+    .pipe($.size({ 'title': '⇒ CSS ' + (argv.deploy ? '(minified)' : '(unminified)'), 'showFiles': true }));
 });
 
 gulp.task('report:js', () => {
   return gulp.src(`${dist.js}/**/*.js`)
-    .pipe($.size({ title: '⇒ JS ' + (argv.deploy ? '(uglified)' : '(debug mode)'), showFiles: true }));
+    .pipe($.size({ 'title': '⇒ JS ' + (argv.deploy ? '(uglified)' : '(debug mode)'), 'showFiles': true }));
 });
 
 /*
@@ -399,7 +391,7 @@ gulp.task('build', done => {
   runSequence(
     'clean',
     'bower',
-    ['sass', 'components', 'browserify', 'modernizr', 'images'],
+    ['sass', 'html', 'browserify', 'modernizr', 'images'],
     'report',
     done
   );
