@@ -18,15 +18,21 @@ In your HTML, include `common.js`, then include a main `app.js` file which will 
 
 ### CSS
 
-The recommended naming convention for components, utilities, and state is borrowed from [@necolas](https://github.com/necolas), and is an extension of BEM syntax:
+The recommended naming convention for components is borrowed from [@necolas](https://github.com/necolas), and is a modification of traditional BEM syntax:
 
 ```css
-.u-utilityName
-.ComponentName
-.ComponentName--modifierName
-.ComponentName-descendant
-.ComponentName-descendant--modifierName
-.ComponentName.is-stateOfComponent
+.Component
+.Component--modifier
+.Component-child
+.Component-child--modifier
+```
+
+Along with the following classes to control appearance, state, and event bindings that can be added to any block or element:
+
+```css
+.u-utility-name
+.is-state
+.js-behaviour-hook
 ```
 
 Generally, the thoughts summed up in [this wonderful article](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/) should guide your CSS authoring.
