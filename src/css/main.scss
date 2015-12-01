@@ -1,12 +1,9 @@
 /*
- * Project-specific Variables
+ * Vendor utilities & variables
  */
 
-@import "utilities/variables";
-
-/*
- * Vendor styles
- */
+// Scut utilities > https://github.com/davidtheclark/scut
+@import "vendor/scut/scut";
 
 // Bootstrap > http://getbootstrap.com/
 
@@ -14,10 +11,35 @@
   @import "vendor/bootstrap-sass/bootstrap/variables";
   @import "vendor/bootstrap-sass/bootstrap/mixins";
 
-  // Reset and dependencies
-  @import "vendor/bootstrap-sass/bootstrap/normalize";
+
+
+/*
+ * Project-specific Variables
+ */
+
+@import "utilities/variables";
+
+
+
+/*
+ * Resets
+ */
+
+// Using individual scut-reset mixins
+@import "utilities/reset";
+
+@import "vendor/bootstrap-sass/bootstrap/normalize";
+
+
+
+/*
+ * Vendor styles
+ */
+
+// Bootstrap > http://getbootstrap.com/
+
+  // Print Styles
   @import "vendor/bootstrap-sass/bootstrap/print";
-  @import "vendor/bootstrap-sass/bootstrap/glyphicons";
 
   // Core CSS
   @import "vendor/bootstrap-sass/bootstrap/type";
@@ -25,36 +47,41 @@
   @import "vendor/bootstrap-sass/bootstrap/tables";
   @import "vendor/bootstrap-sass/bootstrap/forms";
 
-  // Components
+  // Components (add as needed)
   @import "vendor/bootstrap-sass/bootstrap/buttons";
   @import "vendor/bootstrap-sass/bootstrap/button-groups";
+  @import "vendor/bootstrap-sass/bootstrap/dropdowns";
   @import "vendor/bootstrap-sass/bootstrap/input-groups";
-
-// Scut utilities > https://github.com/davidtheclark/scut
-@import "vendor/scut/scut";
 
 // Other stuff - merged into one file, if it exists.
 // @import "vendor/base";
+
+
 
 /*
  * Utilities/Mixins
  */
 
-
 @import "utilities/mixins";
 @import "utilities/responsive";
+
+
 
 /*
  * Base styles
  */
 
-@import "base/reset";
+@import "base/scaffolding";
+
+
 
 /*
  * Partials
  */
 
 @import "utilities/partials";
+
+
 
 /*
  * Components
