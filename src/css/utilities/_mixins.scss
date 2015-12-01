@@ -20,6 +20,7 @@
 }
 
 
+
 /// Set a max width and center, starting at a set breakpoint and up, match max-width to each larger breakpoint
 /// @author Jon Clark
 /// @param $bp [$xsmall-up] - The media query at which containment begins
@@ -48,6 +49,47 @@
   @if ($bp == $xsmall-up and not $strict) or ($bp == $small-up and not $strict) or ($bp == $medium-up and not $strict) or $bp == $large-up {
     @media #{$large-up} {
       max-width: $mq-large - $gutter*2;
+    }
+  }
+}
+
+
+
+/// Transition, using sitewide variables
+/// @author Jon Clark
+/// @param $property - the css property to transition
+/// @param $duration [$transition-duration: .25s]
+/// @param $timing [$transition-timing-function: ease-in-out]
+$transition-duration: .25s !default;
+$transition-timing-function: 'ease-in-out' !default;
+@mixin transition($property, $duration: $transition-duration, $timing: $transition-timing-function) {
+  transition-property: $property;
+  transition-duration: $duration;
+  transition-timing-function: $timing;
+}
+
+
+
+/// Distribute items
+/// @author Hugo Giraudel
+/// @edits Jon Clark (added params)
+/// @param $el [div] - selector of immediate child elements to distribute
+/// @param $gutter [$gutter: 16px] - space between distributed items
+/// @param $max-loops [12] - Set number of distributed elements to accommodate
+///                         (a lower number will save on CSS output)
+/// @link http://stackoverflow.com/a/14960256/174384
+$gutter: 16px !default;
+@mixin distribute($el: div, $gutter: $gutter, $max-loops: 12) {
+  @include make-row($gutter);
+  @for $i from 1 through $max-loops {
+    > #{$el} {
+      &:first-child:nth-last-child(#{$i}),
+      &:first-child:nth-last-child(#{$i}) ~ #{$el} {
+          width: (100%/$i);
+          float: left;
+          padding-right: $gutter*.5;
+          padding-left: $gutter*.5;
+      }
     }
   }
 }
