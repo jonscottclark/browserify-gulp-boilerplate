@@ -236,6 +236,7 @@ gulp.task('bower-sass', () => {
 
       let base = rel.replace(path.join(pkg, baseDirs[pkg], '/'), '').replace(path.basename(file.path), '');
       let dest = path.join(vendor, base);
+      mkdirp(dest);
 
       let ws = fs.createWriteStream(path.join(dest, path.basename(file.path)));
       ws.on('close', cb);
