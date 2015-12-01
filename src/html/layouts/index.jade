@@ -26,5 +26,21 @@ html.no-js
         a {
             color: #69c;
         }
+        .complete {
+            position: relative;
+        }
+        .complete:after {
+            position: absolute;
+            right: -20px;
+            content: '✔';
+            color: #73c672;
+        }
+        ul ul {
+            margin-left: 2em;
+            margin-top: .5em;
+        }
+        ul li + li {
+            margin-top: .5em;
+        }
   body
     block content
