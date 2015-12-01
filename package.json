@@ -1,6 +1,6 @@
 {
   "name": "browserify-gulp-boilerplate",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Boilerplate for rapid front-end component development using Browserify",
   "author": "Jon Scott Clark <me@jclark.io>",
   "license": "MIT",
