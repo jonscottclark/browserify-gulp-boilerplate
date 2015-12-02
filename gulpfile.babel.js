@@ -318,9 +318,9 @@ gulp.task('sass', () => {
 gulp.task('images', () => {
   return gulp.src(src.img)
     .pipe($.if(argv.deploy, $.imagemin({ 'progressive': true })))
+    .pipe(gulp.dest(dist.img))
     .pipe(filters.svg)
-    .pipe($.if(argv.deploy, $.svg2png()))
-    .pipe(filters.svg.restore)
+    .pipe($.svg2png())
     .pipe(gulp.dest(dist.img))
     .pipe($.connect.reload());
 });
